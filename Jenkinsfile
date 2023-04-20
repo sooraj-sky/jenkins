@@ -1,11 +1,12 @@
 pipeline {
-    agent {
-        docker { image 'node:16.13.1-alpine' }
-    }
+    agent any
+    
     stages {
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                sh 'node --version'
+                script {
+                    def dockerImage = docker.build('my-docker-image:latest', '-f JenkinsDockerfile .')
+                }
             }
         }
     }
