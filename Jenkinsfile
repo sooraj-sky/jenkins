@@ -10,4 +10,19 @@ pipeline {
             }
         }
     }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+}
+
+triggers {
+    pullRequestFilter {
+        branches {
+            filter {
+                branchFilter(filterType: 'RegularExpressionFilter', excludedBranches: 'master|develop', includedBranches: '.*')
+            }
+        }
+        triggerOnTargetBranch(true)
+    }
+}
+
 }
