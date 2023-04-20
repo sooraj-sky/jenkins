@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     stages {
-        stage('Build Docker Images') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     def dockerImage = docker.build('my-docker-image:latest', '-f JenkinsDockerfile .')
@@ -10,7 +10,9 @@ pipeline {
             }
         }
     }
-    options {
+}
+
+options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
 }
 
@@ -18,11 +20,10 @@ triggers {
     pullRequestFilter {
         branches {
             filter {
-                branchFilter(filterType: 'RegularExpressionFilter', excludedBranches: 'master|develop', includedBranches: '.*')
+                branchFilter(filterType: 'RegularExpressionFilter', excludedBranches: 'main|dev', includedBranches: '.*')
             }
         }
         triggerOnTargetBranch(true)
     }
 }
 
-}
