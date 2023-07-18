@@ -1,17 +1,16 @@
 pipeline {
     agent any
-    
+
     stages {
-        stage('Modify Version') {
+        stage('Modify Version - djangotag') {
             steps {
                 script {
                     def key1 = 'djangotag'
-                    def key2 = 'djangotag2'
                     def buildId = env.BUILD_NUMBER.toInteger()
                     def pocBuild = "poc-${buildId}"
-                    
+
                     sh """#!/bin/bash
-                        # Create a temporary file to store the modified contents
+                        # Create a temporary file to store the modified contents for djangotag
                         temp_file=\$(mktemp)
 
                         # Read the file line by line, replace the target key's value, and write to the temporary file
@@ -21,14 +20,24 @@ pipeline {
                             else
                                 echo \"\$k:\$v\" >> \"\$temp_file\"
                             fi
-                        done < <(grep "" version.txt)
+                        done < 'version.txt'
 
-                        # Replace the original file with the modified contents
+                        # Replace the original file with the modified contents for djangotag
                         mv \"\$temp_file\" 'version.txt'
 
-                        echo 'Replacement complete.'
+                        echo 'djangotag updated.'
+                    """
+                }
+            }
+        }
+        stage('Modify Version - djangotag2') {
+            steps {
+                script {
+                    def key2 = 'djangotag2'
+                    def buildId = env.BUILD_NUMBER.toInteger()
 
-                        # Read the file again to update djangotag2 after other replacements
+                    sh """#!/bin/bash
+                        # Create a temporary file to store the modified contents for djangotag2
                         temp_file=\$(mktemp)
 
                         # Read the file line by line, replace the target key's value, and write to the temporary file
@@ -41,14 +50,31 @@ pipeline {
                             fi
                         done < 'version.txt'
 
-                        # Replace the original file with the modified contents
+                        # Replace the original file with the modified contents for djangotag2
                         mv \"\$temp_file\" 'version.txt'
 
                         echo 'djangotag2 updated.'
-                        cat version.txt
                     """
                 }
             }
         }
+//        stage('Push to Template Branch') {
+//            steps {
+//                script {
+//                    withCredentials([usernamePassword(credentialsId: 'your-github-credentials-id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//                        def gitUrl = 'https://github.com/sooraj-sky/jenkins.git'
+//                        def repoDir = 'my-repo'
+//                        sh "rm -rf ${repoDir}"
+//                        sh "git clone --branch template ${gitUrl} ${repoDir}"
+//                        sh "cp version.txt ${repoDir}/version.txt"
+//                        sh "cd ${repoDir} && git config user.email 'jenkins@your-domain.com'"
+//                       sh "cd ${repoDir} && git config user.name 'Jenkins'"
+//                        sh "cd ${repoDir} && git add version.txt"
+//                        sh "cd ${repoDir} && git commit -m 'Update version.txt'"
+//                        sh "cd ${repoDir} && git push origin template"
+//                    }
+//                }
+//            }
+//        }
     }
 }
