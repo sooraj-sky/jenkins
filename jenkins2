@@ -5,7 +5,7 @@ pipeline {
         stage('Modify Version') {
             steps {
                 script {
-                    def key1 = 'djangotag'
+                    def key1 = 'djangotag1'
                     def key2 = 'djangotag2'
                     def buildId = env.BUILD_NUMBER.toInteger()
                     
