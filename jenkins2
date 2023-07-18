@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Modify Version') {
+            steps {
+                script {
+                    def key = 'djangotag'
+                    def buildId = env.BUILD_ID
+                    
+                    sh """
+                        # Create a temporary file to store the modified contents
+                        temp_file=\$(mktemp)
+
+                        # Read the file line by line, replace the target key's value, and write to the temporary file
+                        while IFS=':' read -r k v; do
+                            if [[ \$k == '$key' ]]; then
+                                echo \"\$k:$buildId\" >> \"\$temp_file\"
+                            else
+                                echo \"\$k:\$v\" >> \"\$temp_file\"
+                            fi
+                        done < 'version.txt'
+
+                        # Replace the original file with the modified contents
+                        mv \"\$temp_file\" 'version.txt'
+
+                        echo 'Replacement complete.'
+                        cat version.txt
+                    """
+                }
+            }
+        }
+    }
+}
