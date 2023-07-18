@@ -5,17 +5,21 @@ pipeline {
         stage('Modify Version') {
             steps {
                 script {
-                    def key = 'djangotag'
-                    def buildId = env.BUILD_ID
+                    def key1 = 'djangotag'
+                    def key2 = 'djangotag2'
+                    def buildId = env.BUILD_NUMBER.toInteger()
                     
-                    sh """#!/bin/bash
+                    sh """
                         # Create a temporary file to store the modified contents
                         temp_file=\$(mktemp)
 
-                        # Read the file line by line, replace the target key's value, and write to the temporary file
+                        # Read the file line by line, replace the target keys' values, and write to the temporary file
                         while IFS=':' read -r k v; do
-                            if [[ \$k == '$key' ]]; then
-                                echo \"\$k:$buildId\" >> \"\$temp_file\"
+                            if [[ \$k == '$key1' ]]; then
+                                echo \"\$k:latest\" >> \"\$temp_file\"
+                            elif [[ \$k == '$key2' ]]; then
+                                version=\$(echo \$v | awk -F. -v buildId=\$buildId '{\$3+=buildId; print \$1\".\"\$2\".\"\$3}')
+                                echo \"\$k:\$version\" >> \"\$temp_file\"
                             else
                                 echo \"\$k:\$v\" >> \"\$temp_file\"
                             fi
@@ -25,7 +29,6 @@ pipeline {
                         mv \"\$temp_file\" 'version.txt'
 
                         echo 'Replacement complete.'
-                        cat version.txt
                     """
                 }
             }
