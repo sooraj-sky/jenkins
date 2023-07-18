@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     def key1 = 'djangotag'
-                    def key2 = 'djangotag2'
+                    def key2 = 'ubuntu'
                     def buildId = env.BUILD_NUMBER.toInteger()
                     def pocBuild = "poc-${buildId}"
                     
