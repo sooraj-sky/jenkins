@@ -18,7 +18,7 @@ pipeline {
                             if [[ \$k == '$key1' ]]; then
                                 echo \"\$k:latest\" >> \"\$temp_file\"
                             elif [[ \$k == '$key2' ]]; then
-                                version=\$(echo \$v | awk -F. -v buildId=\$buildId '{\$2+=1; print \$1\".\"\$2\".\"\$3}')
+                                version=\$(echo \$v | awk -F. -v buildId=\$buildId '{\$3+=1; print \$1\".\"\$2\".\"\$3}')
                                 echo \"\$k:\$version\" >> \"\$temp_file\"
                             else
                                 echo \"\$k:\$v\" >> \"\$temp_file\"
