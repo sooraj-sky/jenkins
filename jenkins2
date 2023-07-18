@@ -45,6 +45,7 @@ pipeline {
                         mv \"\$temp_file\" 'version.txt'
 
                         echo 'djangotag2 updated.'
+                        cat version.txt
                     """
                 }
             }
