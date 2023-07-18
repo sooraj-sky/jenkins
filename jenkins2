@@ -29,6 +29,7 @@ pipeline {
                         mv \"\$temp_file\" 'version.txt'
 
                         echo 'Replacement complete.'
+                        cat version.txt
                     """
                 }
             }
