@@ -10,7 +10,7 @@ pipeline {
                     def buildId = env.BUILD_NUMBER.toInteger()
                     def pocBuild = "poc-${buildId}"
                     
-                    sh """#/bin/bash
+                    sh """#!/bin/bash
                         # Create a temporary file to store the modified contents
                         temp_file=\$(mktemp)
 
