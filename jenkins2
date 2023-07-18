@@ -21,7 +21,7 @@ pipeline {
                             else
                                 echo \"\$k:\$v\" >> \"\$temp_file\"
                             fi
-                        done < 'version.txt'
+                        done < <(grep "" version.txt)
 
                         # Replace the original file with the modified contents
                         mv \"\$temp_file\" 'version.txt'
