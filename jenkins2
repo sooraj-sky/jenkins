@@ -5,18 +5,19 @@ pipeline {
         stage('Modify Version') {
             steps {
                 script {
-                    def key1 = 'djangotag1'
+                    def key1 = 'djangotag'
                     def key2 = 'djangotag2'
                     def buildId = env.BUILD_NUMBER.toInteger()
+                    def pocBuild = "poc-${buildId}"
                     
-                    sh """#!/bin/bash
+                    sh """#/bin/bash
                         # Create a temporary file to store the modified contents
                         temp_file=\$(mktemp)
 
                         # Read the file line by line, replace the target keys' values, and write to the temporary file
                         while IFS=':' read -r k v; do
                             if [[ \$k == '$key1' ]]; then
-                                echo \"\$k:latest\" >> \"\$temp_file\"
+                                echo \"\$k:${pocBuild}\" >> \"\$temp_file\"
                             elif [[ \$k == '$key2' ]]; then
                                 version=\$(echo \$v | awk -F. -v buildId=\$buildId '{\$3+=1; print \$1\".\"\$2\".\"\$3}')
                                 echo \"\$k:\$version\" >> \"\$temp_file\"
