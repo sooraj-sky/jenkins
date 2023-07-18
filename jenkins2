@@ -8,7 +8,7 @@ pipeline {
                     def key = 'djangotag'
                     def buildId = env.BUILD_ID
                     
-                    sh """
+                    sh """#!/bin/bash
                         # Create a temporary file to store the modified contents
                         temp_file=\$(mktemp)
 
