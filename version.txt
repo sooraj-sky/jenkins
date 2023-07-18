@@ -2,3 +2,4 @@ django:buolf
 djangotag:1.1
 ubuntu:sskdsd/dfd/dfd
 djangotag:1.2
+djangotag2:1.0.1
