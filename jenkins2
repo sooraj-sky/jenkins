@@ -5,8 +5,8 @@ pipeline {
         stage('Modify Version') {
             steps {
                 script {
-                    def key1 = 'djangotag'
-                    def key2 = 'ubuntu'
+                    def key1 = 'ubuntu'
+                    def key2 = 'djangotag'
                     def buildId = env.BUILD_NUMBER.toInteger()
                     def pocBuild = "poc-${buildId}"
                     
