@@ -44,6 +44,18 @@ pipeline {
                 }
             }
         }
+        stage('Modify Image Tag') {
+            steps {
+                script {
+                    def buildId = env.BUILD_NUMBER
+
+                    // Modify the "tag" value with $pocBuild in the version.txt file
+                    sh "sed -i 's/^\\s*tag:\\s*\"ImageTag\"/     tag: \"${buildId}\"/' version.txt"
+
+                    echo 'Image tag modified.'
+                }
+            }
+        }
         stage('Push to Template Branch') {
             steps {
                 script {
