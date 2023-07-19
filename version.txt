@@ -1,7 +1,7 @@
 django:buolf
-djangotag:poc-34
+djangotag:poc-35
 ubuntu:123.23.3
 djangotag2:0.1.0
 image :
      repo: docker/ubuntu
-     tag: "34"
+    tag: "35"
