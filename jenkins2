@@ -65,13 +65,13 @@ pipeline {
                         def gitUrl = 'https://github.com/sooraj-sky/jenkins.git'
                         def repoDir = 'my-repo'
                         sh "rm -rf ${repoDir}"
-                        sh "git clone --branch template ${gitUrl} ${repoDir}"
+                        sh "git clone --branch dev ${gitUrl} ${repoDir}"
                         sh "cp version.txt ${repoDir}/version.txt"
                         sh "cd ${repoDir} && git config user.email 'jenkins@your-domain.com'"
-                       sh "cd ${repoDir} && git config user.name 'Jenkins'"
+                        sh "cd ${repoDir} && git config user.name 'Jenkins'"
                         sh "cd ${repoDir} && git add version.txt"
                         sh "cd ${repoDir} && git commit -m 'Update version.txt'"
-                        sh "cd ${repoDir} && git push origin template"
+                        sh "cd ${repoDir} && git push origin dev"
                     }
                 }
             }
