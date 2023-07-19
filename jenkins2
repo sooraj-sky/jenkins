@@ -23,7 +23,7 @@ pipeline {
                     def buildId = env.BUILD_NUMBER.toInteger()
 
                     // Create a temporary file to store the modified contents for djangotag2
-                    sh """#!/bin/bash
+                    sh """
                         temp_file=\$(mktemp)
 
                         # Read the file line by line, replace the target key's value, and write to the temporary file
@@ -56,6 +56,19 @@ pipeline {
                 }
             }
         }
+        stage('Package Helm Chart') {
+            steps {
+                script {
+                    def ubuntuVersion = sh(returnStdout: true, script: "awk -F':' '/^ubuntu:/ {print \$2}' version.txt").trim()
+                    def helmVersion = "v${ubuntuVersion}"
+                    echo "Using ubuntu version as Helm version: ${helmVersion}"
+
+                    // Package the Helm chart
+                    sh "helm package my-helm-chart --version ${helmVersion} --app-version ${ubuntuVersion} --destination ."
+                    sh "mv my-helm-chart-${helmVersion}.tgz sooraj-${helmVersion}.tgz"
+                }
+            }
+        }
         stage('Push to Template Branch') {
             steps {
                 script {
@@ -65,7 +78,8 @@ pipeline {
                         sh "cd ${repoDir} && git config user.email 'jenkins@your-domain.com'"
                         sh "cd ${repoDir} && git config user.name 'Jenkins'"
                         sh "cd ${repoDir} && git add version.txt"
-                        sh "cd ${repoDir} && git commit -m 'Update version.txt'"
+                        sh "cd ${repoDir} && git add sooraj-${helmVersion}.tgz"
+                        sh "cd ${repoDir} && git commit -m 'Update version.txt and package Helm chart'"
                         sh "cd ${repoDir} && git push origin dev"
                     }
                 }
