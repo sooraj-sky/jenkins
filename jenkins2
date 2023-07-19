@@ -50,9 +50,7 @@ pipeline {
                     def buildId = env.BUILD_NUMBER
 
                     // Modify the "tag" value with $pocBuild in the version.txt file
-                    sh "sed -i 's/^\\s*tag:\\s*\"ImageTag\"/     tag: \"${buildId}\"/' version.txt"
-                    sh "cat version.txt"
-                    
+                    sh "sed -i 's/^\\s*tag:\\s*\"ImageTag\"/    tag: \"${buildId}\"/' version.txt"
 
                     echo 'Image tag modified.'
                 }
