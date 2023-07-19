@@ -47,7 +47,7 @@ pipeline {
         stage('Push to Template Branch') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'your-github-credentials-id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         def repoDir = 'my-repo'
                         sh "cp version.txt ${repoDir}/version.txt"
                         sh "cd ${repoDir} && git config user.email 'jenkins@your-domain.com'"
