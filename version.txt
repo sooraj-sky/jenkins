@@ -1,4 +1,7 @@
 django:buolf
-djangotag:poc-29
+djangotag:poc-31
 ubuntu:123.23.3
-djangotag2:0.0.4
+djangotag2:0.1.0
+image :
+     repo: docker/ubuntu
+     tag: "ImageTag"
