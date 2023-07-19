@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        def gitUrl = 'https://github.com/sooraj-sky/jenkins.git'
+                        def gitUrl = 'https://$USERNAME:$PASSWORD@github.com/sooraj-sky/jenkins.git'
                         def repoDir = 'my-repo'
                         sh "rm -rf ${repoDir}"
                         sh "git clone --branch dev ${gitUrl} ${repoDir}"
