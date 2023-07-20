@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'VERSION_CHOICE', choices: ['latest', 'custom'], description: 'Choose "latest" or "custom" version.')
+        string(name: 'CUSTOM_VERSION', defaultValue: '', description: 'Specify the custom version.')
+    }
+
+    stages {
+        stage('Ask for Version') {
+            steps {
+                script {
+                    def helmVersion
+
+                    if (params.VERSION_CHOICE == 'latest') {
+                        echo 'Latest version will be used.'
+                        // Use the value from the "version.txt" file for helmVersion
+                        helmVersion = sh(returnStdout: true, script: "awk -F':' '/^ubuntu:/ {print \$2}' version.txt").trim()
+                    } else if (params.VERSION_CHOICE == 'custom') {
+                        if (params.CUSTOM_VERSION.trim() == '') {
+                            error('Custom version cannot be empty. Please specify a custom version.')
+                        }
+                        echo "Custom version (${params.CUSTOM_VERSION}) will be used."
+                        helmVersion = params.CUSTOM_VERSION.trim()
+                    } else {
+                        error('Invalid choice. Please choose "latest" or "custom" version.')
+                    }
+
+                    // Set the version as an environment variable for subsequent steps
+                    env.HELM_VERSION = helmVersion
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    // Use the value set in the previous stage for helmVersion
+                    echo "Build step: Using Helm version ${env.HELM_VERSION}"
+                    // You can perform other build steps using the helmVersion value here
+                }
+            }
+        }
+    }
+}
