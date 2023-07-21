@@ -10,6 +10,8 @@ get_latest_version() {
 grep -o '"versions": \[[^]]*\]' <<< "$api_response"
 
 grep -o '"version" : "[^"]*"' <<< "$api_response" | sed -E 's/"version" : "v?([^"]*)"/\1/' | sort -rV | head -1
+grep -o '"version" : "[^"]*"' <<< "$api_response" | grep -oP '(?<="version" : ")[^"]*' | grep -v '^v'
+
 
 
 
