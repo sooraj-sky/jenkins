@@ -12,6 +12,8 @@ grep -o '"versions": \[[^]]*\]' <<< "$api_response"
 grep -o '"version" : "[^"]*"' <<< "$api_response" | sed -E 's/"version" : "v?([^"]*)"/\1/' | sort -rV | head -1
 grep -o '"version" : "[^"]*"' <<< "$api_response" | grep -oP '(?<="version" : ")[^"]*' | grep -v '^v'
 grep -o '[0-9.]*' | sort -t. -k1,1nr -k2,2nr -k3,3nr -k4,4nr | head -1
+your_grep_command | grep -o '[0-9.]*' | sort -t. -k1,1nr -k2,2nr -k3,3nr -k4,4nr | head -1 | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g'
+
 
 
 
