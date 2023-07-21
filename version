@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Function to extract the latest version from the "versions" array
+get_latest_version() {
+  # Parse the JSON response using jq and filter the latest version
+  latest_version=$(echo "$1" | jq -r '.items[0].spec.versions | sort_by(.version) | reverse | .[0].version')
+
+  echo "$latest_version"
+}
+
+# Your cURL command to get the API response
+api_response=$(curl -s "https://test.com")  # Replace with the actual API endpoint URL
+
+# Call the function to get the latest version
+latest_version=$(get_latest_version "$api_response")
+
+echo "Latest Version: $latest_version"
