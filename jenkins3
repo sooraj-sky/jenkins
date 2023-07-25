@@ -8,6 +8,8 @@ pipeline {
                     // Execute the shell script with arguments env1 and env2
                     def one = "test1"
                     def two = "test2"
+                    maskPasswords(varPasswordPairs: [[password: one, var: 'IGNORE'],[password: two, var: 'IGNORE2'],]) {
+
 
                     sh """
                       chmod +x test.sh
