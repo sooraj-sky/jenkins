@@ -13,8 +13,7 @@ pipeline {
                     sh """
                       chmod +x test.sh
                     """
-                    def scriptOutput = sh(returnStdout: true, script: "./test.sh ${one} ${two}").trim()
-                    echo "Concatenated Output: ${scriptOutput}"
+                    def scriptOutput = sh(returnStdout: true, script: "./test.sh ${one} ${two}")
                 }
             }
         }
