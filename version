@@ -24,3 +24,7 @@ api_response=$(curl -s "https://test.com")  # Replace with the actual API endpoi
 latest_version=$(get_latest_version "$api_response")
 
 echo "Latest Version: $latest_version"
+
+every commit in feature brach, creates new docker image. eg:- <image-name>:<branch>-<commit-short-sha>
+Developers should be able deploy this intermediate feature images to Dev env (to a seperate namespace) by updating the helm chart in devops repo 
+A new tag should be created when a feature branch is merged to main
