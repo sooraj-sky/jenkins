@@ -59,6 +59,22 @@ resource "aws_iam_policy" "example_s3_policy" {
         Effect   = "Allow",
         Resource = "${aws_s3_bucket.example_bucket.arn}/*",
       },
+      {
+        Action   = "s3:*",
+        Effect   = "Deny",
+        NotPrincipal = {
+          AWS = "*"
+        },
+        Principal = "*",
+        Resource = [
+          "${aws_s3_bucket.example_bucket.arn}/*"
+        ],
+        Condition = {
+          "Bool": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }
     ],
   })
 }
