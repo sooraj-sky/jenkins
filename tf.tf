@@ -225,3 +225,58 @@ resource "aws_sns_platform_endpoint" "my_platform_endpoint" {
 resource "aws_kms_key" "my_key" {
   description = "My KMS key"
 }
+
+# Create IAM Role
+resource "aws_iam_role" "s3_role" {
+  name = "s3-access-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Attach S3 permissions to IAM Role
+resource "aws_iam_policy" "s3_policy" {
+  name = "s3-access-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        Effect   = "Allow",
+        Resource = [
+          "${aws_s3_bucket.target_bucket.arn}",
+          "${aws_s3_bucket.target_bucket.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+# Attach the policy to the role
+resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
+  policy_arn = aws_iam_policy.s3_policy.arn
+  role       = aws_iam_role.s3_role.name
+}
+
+# Create an EC2 Instance Profile and associate the role
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "ec2-s3-instance-profile"
+  
+  role = aws_iam_role.s3_role.name
+}
