@@ -12,3 +12,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Define a default command to run when the container starts
 CMD ["psql", "--version"]
+I apologize for missing the recent training session. It was my oversight, and I take full responsibility. I understand the importance of these sessions.
+
+To prevent this in the future, I will check for upcoming trainings twice a week. I appreciate your understanding.
