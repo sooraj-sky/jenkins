@@ -12,3 +12,38 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Define a default command to run when the container starts
 CMD ["psql", "--version"]
+
+
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 input.txt output.xml"
+  exit 1
+fi
+
+input_file=$1
+output_file=$2
+
+echo '<?xml version="1.0" encoding="UTF-8" ?>' > "$output_file"
+echo '<testsuites>' >> "$output_file"
+
+while IFS= read -r test_case; do
+  timestamp=$(date +"%s%N")
+  test_case_name=$(echo "$test_case" | head -n 1 | xargs)
+
+  echo "  <testsuite name=\"TestSuite-$timestamp\" tests=\"1\">" >> "$output_file"
+  echo "    <testcase classname=\"TestCase\" name=\"$test_case_name\">" >> "$output_file"
+
+  if [ "$(echo "$test_case" | wc -l)" -gt 1 ]; then
+    failure_message=$(echo "$test_case" | tail -n +2)
+    echo "      <failure message=\"Test failed\">$failure_message</failure>" >> "$output_file"
+  fi
+
+  echo "    </testcase>" >> "$output_file"
+  echo "  </testsuite>" >> "$output_file"
+
+done < "$input_file"
+
+echo '</testsuites>' >> "$output_file"
+
+echo "Conversion complete. JUnit XML written to $output_file"
