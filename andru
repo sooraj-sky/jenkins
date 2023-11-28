@@ -19,3 +19,5 @@ new_tag="2.0.0"
 
 # Use sed to update the tag value in the YAML file
 sed -i 's/\(tag:\s*"\)[^"]*\(.*\)/\1'"$new_tag"'\2/' yourfile.yml
+
+echo "\n $(wc -l < test.txt) warning \n" | cat - test.txt > temp && mv temp test.txt
