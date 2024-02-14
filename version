@@ -40,12 +40,8 @@ pod_name="$1"
 container_name="$2"
 
 while true; do
-  status=$(kubectl get pod "$pod_name" -o=jsonpath='{.status.containerStatuses[?(@.name=="'$container_name'")].state.running}')
+  status=$(kubectl exec "$pod_name" -- ps -ef | grep 'nohup jmeter' | grep -v 'grep')
   if [ -z "$status" ]; then
-    echo "Container is not running"
-    exit 1
-  fi
-  if [ "$status" != "true" ]; then
     echo "JMeter process has completed"
     exit 0
   fi
