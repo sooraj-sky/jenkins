@@ -47,3 +47,6 @@ while true; do
   fi
   sleep 10
 done
+
+sed -i "s/^\( *\)tag:.*/\1tag: $dockertag/" input.yml
+
