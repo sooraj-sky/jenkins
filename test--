@@ -31,6 +31,32 @@ table Results {
 
 Ref: "Services"."id" < "Jobs"."service"
 
+
+
+CREATE TABLE Services (
+    Service_ID INTEGER PRIMARY KEY,
+    Service_Name VARCHAR(255)
+);
+
+CREATE TABLE UnitAndBDDTests (
+    Service_ID INTEGER,
+    Branch_Name VARCHAR(255),
+    Pipeline_ID INTEGER,
+    Pipeline_Ending_Time TIMESTAMP,
+    Test_Type VARCHAR(50),
+    Total INTEGER,
+    Pass INTEGER,
+    Fail INTEGER,        -- Changed from "Fall" to "Fail"
+    Errors INTEGER,
+    Skipped INTEGER,
+    UnitTests_FinalStatus BOOLEAN,
+    Job_ID INTEGER,
+    UnitTests_Starting_Time TIMESTAMP,
+    UnitTests_Ending_Time TIMESTAMP,
+    FOREIGN KEY (Service_ID) REFERENCES Services(Service_ID)
+);
+
+
 Ref: "Jobs"."id" < "Results"."job"
 
 Ref: "Projects"."id" < "Services"."id"
