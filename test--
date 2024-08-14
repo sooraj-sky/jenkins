@@ -1,0 +1,36 @@
+// https://dbdiagram.io/d
+// Seperate Database for each project
+// Index is needed
+
+table Projects {
+  id integer [primary key]
+  name varchar
+}
+
+table Services {
+  id integer [primary key]
+  name varchar
+}
+
+table Jobs {
+  id integer [primary key]
+  job_url varchar
+  start_time timestamp
+  end_time timestamp
+  status bool
+  service integer
+}
+
+table Results {
+  test_name varchar
+  num_tests integer
+  failed integer
+  job integer
+  time_taken integer // seconds
+}
+
+Ref: "Services"."id" < "Jobs"."service"
+
+Ref: "Jobs"."id" < "Results"."job"
+
+Ref: "Projects"."id" < "Services"."id"
