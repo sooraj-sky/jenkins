@@ -1,0 +1,56 @@
+CI:
+stages:
+  - 🛂_check
+
+🚧_renovate:
+  stage: 🛂_check
+  image: ghcr.io/renovatebot/renovate:37.373.0
+  script:
+    - renovate
+  variables:
+    RENOVATE_CONFIG_FILE: renovate-config.js
+    LOG_LEVEL: "debug"
+renovate-config.js
+module.exports = {
+    platform: 'gitlab',
+    endpoint: process.env.CI_API_V4_URL,
+    token: process.env.GITHUB_COM_TOKEN,
+    onboarding: false,
+    persistRepoData: true,
+    packageRules: [
+        {
+        "matchDatasources": ["terraform-provider", "terraform-module"],
+        "registryUrls": ["https://registry.opentofu.org"]
+        }
+    ],
+    onboardingConfig: {
+      extends: ['config:recommended'],
+    },
+    repositories: ["skywalks/poc/tf-notifications"]
+};
+renovate.json
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:base"
+    ],
+    "dependencyDashboard": true,
+    "baseBranches": [
+        "main"
+    ],
+    "enabledManagers": [
+        "terraform"
+    ],
+    "labels": ["dependencies", "terraform"],
+    "timezone": "Asia/Jakarta",
+    "schedule": [
+        "every weekday"
+    ],
+    "prHourlyLimit": 10,
+    "commitMessagePrefix": "Terraform Update: ",
+    "logFileLevel": "info",
+    "logFile": "./logs/renovate.txt",
+    "prCreation": "status-success"
+    
+}
+
