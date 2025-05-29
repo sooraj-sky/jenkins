@@ -2,7 +2,7 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "platform": "gitlab",
     "endpoint": "${CI_API_V4_URL}",
-    "token": "${GITHUB_COM_TOKEN}",
+    "token": "${GITLAB_TOKEN}",
     "repositories": ["skywalks/poc/tf-notifications"],
     "extends": [
         "config:recommended"
@@ -27,10 +27,17 @@
     "prCreation": "status-success",
     "onboarding": false,
     "persistRepoData": true,
+    "hostRules": [
+        {
+            "hostType": "terraform",
+            "matchHost": "yourcompany.jfrog.io",
+            "token": "${JFROG_TOKEN}"
+        }
+    ],
     "packageRules": [
         {
             "matchDatasources": ["terraform-provider", "terraform-module"],
-            "registryUrls": ["https://your-jfrog-registry-url"],
+            "registryUrls": ["https://yourcompany.jfrog.io/artifactory/terraform"],
             "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\+(?<build>[^+]+\\+\\d+))?$",
             "matchPackagePatterns": ["*"],
             "automerge": false,
@@ -46,5 +53,3 @@
         "terraformLockFile"
     ]
 }
-
-
